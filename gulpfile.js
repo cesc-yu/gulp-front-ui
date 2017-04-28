@@ -13,7 +13,7 @@ var config = require('./config') // 加载配置文件
 var outputCss = 'app.min.css' // 输出css路径
 
 // 定义任务
-gulp.task('auto-refresh', function() { // 浏览器自动刷新
+gulp.task('auto', function() { // 浏览器自动刷新
 
 	// 定义监听
 	browserSync.watch(config.watch.js, browserSync.reload)
@@ -69,10 +69,10 @@ gulp.task('href', function() { // 替换css引用路径
 		.pipe(gulp.dest(config.dist))
 })
 
-gulp.task('rev', function() {
+gulp.task('rev', function() { // 生成html文件，并替换为md5的css文件名
 	gulp.src([config.dist + '/rev/*.json', config.dist + '/*.html']) //- 读取 rev-manifest.json 文件以及需要进行css名替换的文件
 		.pipe(revCollector()) // 执行文件内css名的替换
 		.pipe(gulp.dest(config.dist)) // 文件输出的目录
 })
 
-gulp.task('default', ['auto-refresh', 'concat', 'href', 'rev'])
+gulp.task('default', ['auto', 'concat', 'href', 'rev'])
