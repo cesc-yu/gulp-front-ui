@@ -5,6 +5,7 @@ var minifyCss = require('gulp-minify-css') // 压缩CSS
 var rev = require('gulp-rev') // 文件名加MD5后缀
 var revCollector = require('gulp-rev-collector') // 路径替换
 var cheerio = require('gulp-cheerio') // 对HTML和XML文件进行DOM操作
+var sequence = require('gulp-sequence') // 执行多个任务
 
 // 参考：http://www.browsersync.cn/
 var browserSync = require('browser-sync').create()
@@ -64,7 +65,7 @@ gulp.task('href', function() { // 替换css引用路径
 	return gulp.src(config.src + '/*.html')
 		.pipe(cheerio(function ($) {
 			$('link').remove()
-			$('head').append('<link rel="stylesheet" href="' + outputCss + '">')
+			$('head').append('<link rel="stylesheet" href=".' + config.output.css + '/' + outputCss + '">')
 		}))
 		.pipe(gulp.dest(config.dist))
 })
@@ -75,4 +76,6 @@ gulp.task('rev', function() { // 生成html文件，并替换为md5的css文件�
 		.pipe(gulp.dest(config.dist)) // 文件输出的目录
 })
 
-gulp.task('default', ['auto', 'concat', 'href', 'rev'])
+gulp.task('default', ['auto', 'concat'])
+
+gulp.task('concat-all', sequence('concat', 'href', 'rev'))
