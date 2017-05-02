@@ -2,10 +2,10 @@
 >基于gulp的前端页面工作流
 
 #### 1. 配置环境
-**1. nodejs + npm**
+**1.1. nodejs + npm**
 [https://nodejs.org/en/](https://nodejs.org/en/)
 
-**2. git**
+**1.2. git**
 [https://git-scm.com/](https://git-scm.com/)
 
 #### 2. clone code
@@ -21,11 +21,20 @@ $ npm install
 #### 4. 运行
 ````cmd
 // 实时刷新浏览器
-gulp
+gulp || gulp run
 
 // 合并css
-gulp concat
+gulp concat-css
 
 // 合并css，并生成html文件，替换css引用路径
 gulp concat-all
+
+// css 代码风格检测
+lint-css
+
+// js 代码风格检测
+lint-js
+
+// 编译es6代码
+babel-js
 ````
