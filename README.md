@@ -2,7 +2,7 @@
 >基于gulp的前端页面工作流
 
 #### 配置环境
-**1.nodejs + npm**
+**1. nodejs + npm**
 [https://nodejs.org/en/](https://nodejs.org/en/)
 
 **2. git**
