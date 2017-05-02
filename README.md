@@ -1,7 +1,11 @@
 # gulp-front-ui
 >基于gulp的前端页面工作流
 
+<<<<<<< HEAD
 #### 1. 配置环境
+=======
+#### 配置环境
+>>>>>>> 8b9398f0d32401b9ec5c7da0792d6b836f071a63
 **1. nodejs + npm**
 [https://nodejs.org/en/](https://nodejs.org/en/)
 
