@@ -12,22 +12,21 @@ const eslint = require('gulp-eslint') // js代码风格检测 参考：http://es
 const stylelint = require('gulp-stylelint') // css代码风格检测 参考：https://github.com/olegskl/gulp-stylelint
 
 // 参考：http://www.browsersync.cn/
-const browserSync = require('browser-sync').create()
+const browserSync = require('browser-sync').create('run server')
 
 const config = require('./config') // 加载配置文件
 const outputCss = 'app.min.css' // 输出css路径
 
 // 定义任务
-gulp.task('run', () => { // 浏览器自动刷新
+gulp.task('browser', () => { // 浏览器自动刷新
 
-	// 定义监听
 	gulp.watch(config.watch.js, ['lint-js'])
 	gulp.watch(config.watch.css, ['lint-css'])
 	gulp.watch(config.watch.images, browserSync.reload)
 	gulp.watch(config.watch.html, browserSync.reload)
+	gulp.watch(config.watch.index, browserSync.reload)
 	gulp.watch(config.watch.index, (event, fileName, fileMsg) => {
-		if (event === 'change') {
-			browserSync.reload(fileName)
+		if (event === 'changed') {
 		}
 	})
 
@@ -37,14 +36,16 @@ gulp.task('run', () => { // 浏览器自动刷新
 			basedir: config.src,
 			directory: true
 		},
-		// port: 8080, // 默认自动分配
+		port: 9999, // 默认自动分配
 		browser: ['chrome'], // 选择打开的浏览器 ['chrome', 'firefox', 'iexplore', 'baidubrowser', 'UCBrowser', '360chrome']
-		startPath: config.src + config.entry.index, // 指定打开的路径
+		startPath: config.entry.index, // 指定打开的路径
 		ghostMode: { // 点击，表单和滚动在任何设备上输入将被镜像到所有设备里
 			clicks: false,
 			forms: false,
 			scroll: false
 		},
+		notify: false,
+		ghostMode:false,
 		open: 'external' // external:以IP形式打开 local:以localhost形式打开
 	}, (err, bs) => {
 		if (!err) {
@@ -80,17 +81,6 @@ gulp.task('rev', () => { // 生成html文件，并替换为md5的css文件名
 		.pipe(gulp.dest(config.dist)) // 文件输出的目录
 })
 
-gulp.task('lint-js', () => { // js代码风格检测
-	return gulp
-		.src(config.entry.js)
-		.pipe(eslint())
-		.pipe(eslint.format())
-    .pipe(eslint.failAfterError())
-		.pipe(browserSync.reload({
-			stream: true
-		}))
-})
-
 gulp.task('lint-css', () => { // css代码风格检测
 	return gulp
 		.src(config.entry.css)
@@ -102,6 +92,17 @@ gulp.task('lint-css', () => { // css代码风格检测
 				}
 			]
 		}))
+		.pipe(browserSync.reload({
+			stream: true
+		}))
+})
+
+gulp.task('lint-js', () => { // js代码风格检测
+	return gulp
+		.src(config.entry.js)
+		.pipe(eslint())
+		.pipe(eslint.format())
+    .pipe(eslint.failAfterError())
 		.pipe(browserSync.reload({
 			stream: true
 		}))
@@ -120,6 +121,6 @@ gulp.task('babel-js', () => { // 编译es6代码
 		}))
 })
 
-gulp.task('default', ['run', 'concat-css']) // 浏览器自动刷新
+gulp.task('default', ['browser']) // 浏览器自动刷新
 
 gulp.task('concat-all', sequence('concat-css', 'href', 'rev')) // 合并css并自动生成html引用
